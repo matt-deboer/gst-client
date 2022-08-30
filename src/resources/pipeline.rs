@@ -21,9 +21,9 @@ pub struct Pipeline {
 }
 
 impl Pipeline {
-    pub(crate) fn new(name: &str, client: &GstClient) -> Self {
+    pub(crate) fn new<S:Into<String>>(name: S, client: &GstClient) -> Self {
         Self {
-            name: name.to_owned(),
+            name: name.into(),
             client: client.clone(),
         }
     }
@@ -40,12 +40,12 @@ impl Pipeline {
     ///
     /// If API request cannot be performed, or fails.
     /// See [`Error`] for details.
-    pub async fn create(&self, description: &str) -> Result<gstd_types::Response, Error> {
+    pub async fn create<S:Into<String>>(&self, description: S) -> Result<gstd_types::Response, Error> {
         let resp = self
             .client
             .post(&format!(
-                "pipelines?name={}&description={description}",
-                self.name
+                "pipelines?name={}&description={}",
+                self.name, description.into()
             ))
             .await?;
         self.client.process_resp(resp).await
@@ -103,7 +103,7 @@ impl Pipeline {
     ///
     /// [1]: https://developer.ridgerun.com/wiki/index.php/GStreamer_Daemon
     #[must_use]
-    pub fn element(&self, name: &str) -> PipelineElement {
+    pub fn element<S:Into<String>>(&self, name: S) -> PipelineElement {
         PipelineElement::new(name, self)
     }
     /// Operate with [`GStreamer Daemon`][1] pipeline bus.
