@@ -22,7 +22,7 @@ fmt: cargo.fmt
 
 lint: cargo.lint
 
-
+doc: cargo.doc
 
 
 ##################
@@ -45,6 +45,16 @@ cargo.fmt:
 
 cargo.lint:
 	cargo clippy --all -- -D clippy::pedantic -D warnings
+
+
+
+# Generate Rust docs.
+#
+# Usage:
+#	make cargo.doc
+
+cargo.doc:
+	cargo doc --all-features
 
 
 ##################
