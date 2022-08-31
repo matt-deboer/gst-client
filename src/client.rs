@@ -121,6 +121,15 @@ impl Default for GstClient {
     }
 }
 
+impl From<Url> for GstClient {
+    fn from(url: Url) -> Self {
+        Self {
+            http_client: Client::new(),
+            base_url: url,
+        }
+    }
+}
+
 #[cfg(test)]
 mod spec {
     use super::*;
