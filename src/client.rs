@@ -23,7 +23,7 @@ impl GstClient {
     /// If incorrect `base_url` passed
     ///
     /// [1]: https://developer.ridgerun.com/wiki/index.php/GStreamer_Daemon
-    pub fn build<S:Into<String>>(base_url: S) -> Result<Self, Error> {
+    pub fn build<S: Into<String>>(base_url: S) -> Result<Self, Error> {
         Ok(Self {
             http_client: Client::new(),
             base_url: Url::parse(&base_url.into()).map_err(Error::IncorrectBaseUrl)?,
@@ -97,7 +97,10 @@ impl GstClient {
     ///
     /// [1]: https://developer.ridgerun.com/wiki/index.php/GStreamer_Daemon
     #[must_use]
-    pub fn pipeline<S>(&self, name: S) -> resources::Pipeline where S: Into<String>{
+    pub fn pipeline<S>(&self, name: S) -> resources::Pipeline
+    where
+        S: Into<String>,
+    {
         resources::Pipeline::new(name, self)
     }
     /// Manage [`GStreamer Daemon`][1] Debug mode.
