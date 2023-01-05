@@ -86,7 +86,9 @@ pub struct Param {
 /// `GET /pipelines` API request
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Properties {
+    #[serde(default)]
     pub properties: Vec<Property>,
+    #[serde(default)]
     pub nodes: Vec<Node>,
 }
 
