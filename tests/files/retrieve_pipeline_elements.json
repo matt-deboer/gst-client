@@ -1,0 +1,58 @@
+{
+    "code": 0,
+    "description": "Success",
+    "response": {
+        "properties": [
+            {
+                "name": "parent",
+                "value": "NULL",
+                "param": {
+                    "description": "The parent of the object",
+                    "type": "GstObject",
+                    "access": "((GstdParamFlags) READ | 8418)"
+                }
+            },
+            {
+                "name": "name",
+                "value": "elements",
+                "param": {
+                    "description": "The name of the current Gstd session",
+                    "type": "gchararray",
+                    "access": "((GstdParamFlags) READ | 234)"
+                }
+            },
+            {
+                "name": "count",
+                "value": 1,
+                "param": {
+                    "description": "The amount of nodes in the list",
+                    "type": "guint",
+                    "access": "((GstdParamFlags) READ)"
+                }
+            },
+            {
+                "name": "node-type",
+                "value": "((gpointer) 0xffff74005c50)",
+                "param": {
+                    "description": "The type of the node that the list holds",
+                    "type": "GType",
+                    "access": "((GstdParamFlags) READ | 10)"
+                }
+            },
+            {
+                "name": "flags",
+                "value": "((GstdParamFlags) READ)",
+                "param": {
+                    "description": "The resource access flags",
+                    "type": "GstdParamFlags",
+                    "access": "((GstdParamFlags) READ | 2)"
+                }
+            }
+        ],
+        "nodes": [
+            {
+                "name": "videotestsrc0"
+            }
+        ]
+    }
+}

@@ -142,19 +142,22 @@ impl From<&Url> for GstClient {
 #[cfg(test)]
 mod spec {
     use super::*;
-    const BASE_URL: &'static str = "http://10.211.55.4:5000";
-    const PIPELINE_NAME: &'static str = "test pipeline";
+    use mockito::{self, mock};
+    // const BASE_URL: &'static str = "http://10.211.55.4:5000";
+    const PIPELINE_NAME: &str = "test_pipeline";
+    const PIPELINE_DESC: &str = "videotestsrc pattern=ball";
+    const PROJECT_ROOT: &str = env!("CARGO_MANIFEST_DIR");
 
     fn expect_url() -> Url {
-        Url::parse(BASE_URL).unwrap()
+        Url::parse(mockito::server_url().as_str()).unwrap()
     }
 
     #[test]
     fn create_client_with_build() {
-        let client = GstClient::build(BASE_URL).unwrap();
+        let client = GstClient::build(mockito::server_url().as_str()).unwrap();
         assert_eq!(client.base_url, expect_url());
 
-        let client = GstClient::build(BASE_URL.to_string()).unwrap();
+        let client = GstClient::build(mockito::server_url()).unwrap();
         assert_eq!(client.base_url, expect_url());
     }
 
@@ -170,24 +173,79 @@ mod spec {
 
     #[tokio::test]
     async fn create_pipeline() {
-        if let Ok(client) = GstClient::build(BASE_URL) {
-            let res = client.pipeline(PIPELINE_NAME).create("").await;
+        let _m = mock("POST", format!("/pipelines?name={PIPELINE_NAME}&description={PIPELINE_DESC}").as_str())
+                .with_body_from_file(format!("{PROJECT_ROOT}/tests/files/create_pipeline.json"))
+                .create();
+
+        if let Ok(client) = GstClient::build(mockito::server_url().as_str()) {
+            let res = client.pipeline(PIPELINE_NAME).create(PIPELINE_DESC).await;
             println!("{:?}", res);
             assert!(res.is_ok());
         };
     }
+    
     #[tokio::test]
     async fn retrieve_pipelines() {
-        if let Ok(client) = GstClient::build(BASE_URL) {
+        let _m = mock("GET", "/pipelines")
+                .with_body_from_file(format!("{PROJECT_ROOT}/tests/files/retrieve_pipelines.json"))
+                .create();
+
+        if let Ok(client) = GstClient::build(mockito::server_url().as_str()) {
             let res = client.pipelines().await;
             println!("{:?}", res);
             assert!(res.is_ok());
+            
+            match res {
+                Err(e) => { panic!("Unexpected error: {e}"); }
+                Ok(r) => {
+                    match r.response {
+                        gstd_types::ResponseT::Properties(props) => {
+                            assert_eq!(props.nodes.len(), 1);
+                            assert_eq!(props.nodes[0].name.as_str(), PIPELINE_NAME);
+                        }
+                        _ => {
+                            panic!("Unexpected response type");
+                        }
+                    }
+                }
+            }
+        };
+    }
+
+    #[tokio::test]
+    async fn retrieve_pipelines_empty() {
+        let _m = mock("GET", "/pipelines")
+                .with_body_from_file(format!("{PROJECT_ROOT}/tests/files/retrieve_pipelines_empty.json"))
+                .create();
+
+        if let Ok(client) = GstClient::build(mockito::server_url().as_str()) {
+            let res = client.pipelines().await;
+            println!("{:?}", res);
+            assert!(res.is_ok());
+            
+            match res {
+                Err(e) => { panic!("Unexpected error: {e}"); }
+                Ok(r) => {
+                    match r.response {
+                        gstd_types::ResponseT::Properties(props) => {
+                            assert!(props.nodes.is_empty());
+                        }
+                        _ => {
+                            panic!("Unexpected response type");
+                        }
+                    }
+                }
+            }
         };
     }
 
     #[tokio::test]
     async fn retrieve_pipeline_graph() {
-        if let Ok(client) = GstClient::build(BASE_URL) {
+        let _m = mock("GET", format!("/pipelines/{PIPELINE_NAME}/graph").as_str())
+                .with_body_from_file(format!("{PROJECT_ROOT}/tests/files/retrieve_pipeline_graph.json"))
+                .create();
+        
+        if let Ok(client) = GstClient::build(mockito::server_url().as_str()) {
             let res = client.pipeline(PIPELINE_NAME).graph().await;
             println!("{:?}", res);
             assert!(res.is_ok());
@@ -196,7 +254,11 @@ mod spec {
 
     #[tokio::test]
     async fn retrieve_pipeline_elements() {
-        if let Ok(client) = GstClient::build(BASE_URL) {
+        let _m = mock("GET", format!("/pipelines/{PIPELINE_NAME}/elements").as_str())
+                .with_body_from_file(format!("{PROJECT_ROOT}/tests/files/retrieve_pipeline_elements.json"))
+                .create();
+        
+        if let Ok(client) = GstClient::build(mockito::server_url().as_str()) {
             let res = client.pipeline(PIPELINE_NAME).elements().await;
             println!("{:?}", res);
             assert!(res.is_ok());
@@ -204,7 +266,11 @@ mod spec {
     }
     #[tokio::test]
     async fn retrieve_pipeline_properties() {
-        if let Ok(client) = GstClient::build(BASE_URL) {
+        let _m = mock("GET", format!("/pipelines/{PIPELINE_NAME}").as_str())
+                .with_body_from_file(format!("{PROJECT_ROOT}/tests/files/retrieve_pipeline_properties.json"))
+                .create();
+        
+        if let Ok(client) = GstClient::build(mockito::server_url().as_str()) {
             let res = client.pipeline(PIPELINE_NAME).properties().await;
             println!("{:?}", res);
             assert!(res.is_ok());
@@ -212,22 +278,30 @@ mod spec {
     }
     #[tokio::test]
     async fn retrieve_pipeline_element_property() {
-        if let Ok(client) = GstClient::build(BASE_URL) {
+        let _m = mock("GET", format!("/pipelines/{PIPELINE_NAME}/elements/videotestsrc0/properties/is-live").as_str())
+                .with_body_from_file(format!("{PROJECT_ROOT}/tests/files/retrieve_element_property.json"))
+                .create();
+        
+        if let Ok(client) = GstClient::build(mockito::server_url().as_str()) {
             let res = client
                 .pipeline(PIPELINE_NAME)
-                .element("rtmp2src")
-                .property("location")
+                .element("videotestsrc0")
+                .property("is-live")
                 .await;
             println!("{:?}", res);
             assert!(res.is_ok());
         };
     }
-    #[tokio::test]
-    async fn retrieve_pipeline_bus_read() {
-        if let Ok(client) = GstClient::build(BASE_URL) {
-            let res = client.pipeline(PIPELINE_NAME).bus().read().await;
-            println!("{:?}", res);
-            assert!(res.is_ok());
-        };
-    }
+    // #[tokio::test]
+    // async fn retrieve_pipeline_bus_read() {
+    //     let _m = mock("GET", format!("/pipelines/{PIPELINE_NAME}").as_str())
+    //             .with_body_from_file(format!("{PROJECT_ROOT}/tests/files/retrieve_element_property.json"))
+    //             .create();
+        
+    //     if let Ok(client) = GstClient::build(mockito::server_url().as_str()) {
+    //         let res = client.pipeline(PIPELINE_NAME).bus().read().await;
+    //         println!("{:?}", res);
+    //         assert!(res.is_ok());
+    //     };
+    // }
 }

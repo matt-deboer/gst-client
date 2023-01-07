@@ -1,0 +1,13 @@
+{
+    "code": 0,
+    "description": "Success",
+    "response": {
+        "name": "is-live",
+        "value": "false",
+        "param": {
+            "description": "Whether to act as a live source",
+            "type": "gboolean",
+            "access": "((GstdParamFlags) READ | 226)"
+        }
+    }
+}

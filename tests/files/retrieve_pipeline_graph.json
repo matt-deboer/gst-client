@@ -1,0 +1,13 @@
+{
+    "code": 0,
+    "description": "Success",
+    "response": {
+        "name": "graph",
+        "value": "\"digraph\\ pipeline\\ \\{\\012\\ \\ rankdir\\=LR\\;\\012\\ \\ fontname\\=\\\"sans\\\"\\;\\012\\ \\ fontsize\\=\\\"10\\\"\\;\\012\\ \\ labelloc\\=t\\;\\012\\ \\ nodesep\\=.1\\;\\012\\ \\ ranksep\\=.2\\;\\012\\ \\ label\\=\\\"\\<GstPipeline\\>\\\\ntest_pipeline\\\\n\\[0\\]\\\"\\;\\012\\ \\ node\\ \\[style\\=\\\"filled\\,rounded\\\"\\,\\ shape\\=box\\,\\ fontsize\\=\\\"9\\\"\\,\\ fontname\\=\\\"sans\\\"\\,\\ margin\\=\\\"0.0\\,0.0\\\"\\]\\;\\012\\ \\ edge\\ \\[labelfontsize\\=\\\"6\\\"\\,\\ fontsize\\=\\\"9\\\"\\,\\ fontname\\=\\\"monospace\\\"\\]\\;\\012\\ \\ \\012\\ \\ legend\\ \\[\\012\\ \\ \\ \\ pos\\=\\\"0\\,0\\!\\\"\\,\\012\\ \\ \\ \\ margin\\=\\\"0.05\\,0.05\\\"\\,\\012\\ \\ \\ \\ style\\=\\\"filled\\\"\\,\\012\\ \\ \\ \\ label\\=\\\"Legend\\\\lElement-States:\\ \\[\\~\\]\\ void-pending\\,\\ \\[0\\]\\ null\\,\\ \\[-\\]\\ ready\\,\\ \\[\\=\\]\\ paused\\,\\ \\[\\>\\]\\ playing\\\\lPad-Activation:\\ \\[-\\]\\ none\\,\\ \\[\\>\\]\\ push\\,\\ \\[\\<\\]\\ pull\\\\lPad-Flags:\\ \\[b\\]locked\\,\\ \\[f\\]lushing\\,\\ \\[b\\]locking\\,\\ \\[E\\]OS\\;\\ upper-case\\ is\\ set\\\\lPad-Task:\\ \\[T\\]\\ has\\ started\\ task\\,\\ \\[t\\]\\ has\\ paused\\ task\\\\l\\\"\\,\\012\\ \\ \\]\\;\\012\\ \\ subgraph\\ cluster_videotestsrc0_0xffff74010470\\ \\{\\012\\ \\ \\ \\ fontname\\=\\\"Bitstream\\ Vera\\ Sans\\\"\\;\\012\\ \\ \\ \\ fontsize\\=\\\"8\\\"\\;\\012\\ \\ \\ \\ style\\=\\\"filled\\,rounded\\\"\\;\\012\\ \\ \\ \\ color\\=black\\;\\012\\ \\ \\ \\ label\\=\\\"GstVideoTestSrc\\\\nvideotestsrc0\\\\n\\[0\\]\\\\npattern\\=ball\\\"\\;\\012\\ \\ \\ \\ subgraph\\ cluster_videotestsrc0_0xffff74010470_src\\ \\{\\012\\ \\ \\ \\ \\ \\ label\\=\\\"\\\"\\;\\012\\ \\ \\ \\ \\ \\ style\\=\\\"invis\\\"\\;\\012\\ \\ \\ \\ \\ \\ videotestsrc0_0xffff74010470_src_0xffff740121e0\\ \\[color\\=black\\,\\ fillcolor\\=\\\"\\#ffaaaa\\\"\\,\\ label\\=\\\"src\\\\n\\[-\\]\\[bFb\\]\\\"\\,\\ height\\=\\\"0.2\\\"\\,\\ style\\=\\\"filled\\,solid\\\"\\]\\;\\012\\ \\ \\ \\ \\}\\012\\012\\ \\ \\ \\ fillcolor\\=\\\"\\#ffaaaa\\\"\\;\\012\\ \\ \\}\\012\\012\\}\\012\"",
+        "param": {
+            "description": "The pipeline graph on GraphViz dot format",
+            "type": "gchararray",
+            "access": "((GstdParamFlags) READ | 224)"
+        }
+    }
+}
