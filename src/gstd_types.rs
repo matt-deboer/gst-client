@@ -87,6 +87,7 @@ pub struct Param {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Properties {
     pub properties: Vec<Property>,
+    #[serde(default)]
     pub nodes: Vec<Node>,
 }
 
