@@ -85,7 +85,7 @@ impl Pipeline {
         self.client.process_resp(resp).await
     }
 
-    /// Performs `GET /pipelines/{name}/properties`
+    /// Performs `GET /pipelines/{name}`
     /// API request, returning the parsed [`gstd_types::Response`]
     ///
     /// # Errors
@@ -95,7 +95,7 @@ impl Pipeline {
     pub async fn properties(&self) -> Result<gstd_types::Response, Error> {
         let resp = self
             .client
-            .get(&format!("pipelines/{}/properties", self.name))
+            .get(&format!("pipelines/{}", self.name))
             .await?;
         self.client.process_resp(resp).await
     }
@@ -219,7 +219,7 @@ impl Pipeline {
     pub async fn stop(&self) -> Result<gstd_types::Response, Error> {
         let resp = self
             .client
-            .put(&format!("pipelines/{}/state?name=stop", self.name))
+            .put(&format!("pipelines/{}/state?name=null", self.name))
             .await?;
         self.client.process_resp(resp).await
     }
