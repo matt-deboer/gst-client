@@ -113,7 +113,7 @@ pub struct Property {
 #[serde(untagged)]
 pub enum PropertyValue {
     String(String),
-    Integer(i32),
+    Integer(i64),
     Bool(bool),
 }
 
