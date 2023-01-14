@@ -15,8 +15,8 @@ pub enum Error {
     ///
     /// [`StatusCode`]: reqwest::StatusCode
     /// [`GstClient`]: crate::GstClient
-    #[display(fmt = "API responded with bad status: {}", _0)]
-    BadStatus(#[error(not(source))] reqwest::StatusCode),
+    #[display(fmt = "API responded with bad status: {} - {}", _0, _1)]
+    BadStatus(#[error(not(source))] reqwest::StatusCode, String),
 
     /// [`GstClient`] responded with a bad body, which cannot be deserialized.
     ///
@@ -39,6 +39,6 @@ pub enum Error {
     /// Failed to process request on [GStD] side.
     ///
     /// [GStD]: https://developer.ridgerun.com/wiki/index.php/GStreamer_Daemon
-    #[display(fmt = "Failed to process request: {}", _0)]
-    GstdError(ResponseCode),
+    #[display(fmt = "Failed to process request: {} - {}", _0, _1)]
+    GstdError(ResponseCode, String),
 }

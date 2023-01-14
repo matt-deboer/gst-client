@@ -2,7 +2,10 @@
 //! [`GStreamer Daemon`][1] API.
 //!
 //! [1]: https://developer.ridgerun.com/wiki/index.php/GStreamer_Daemon
-use crate::{gstd_types, resources, Error};
+use crate::{
+    gstd_types::{self, ResponseCode},
+    resources, Error,
+};
 use reqwest::{Client, Response};
 use url::Url;
 
@@ -63,19 +66,50 @@ impl GstClient {
     }
 
     pub(crate) async fn process_resp(&self, resp: Response) -> Result<gstd_types::Response, Error> {
-        if !resp.status().is_success() {
-            return Err(Error::BadStatus(resp.status()));
+        let status = resp.status();
+        let body = resp.text().await.map_err(Error::BadBody)?;
+        if body.is_empty() && status.is_success() {
+            return Ok(gstd_types::Response {
+                code: ResponseCode::Success,
+                description: "Success".to_string(),
+                response: gstd_types::ResponseT::Bus(None),
+            });
+        }
+        match serde_json::from_str::<gstd_types::Response>(body.as_str()) {
+            Ok(res) => {
+                if res.code != gstd_types::ResponseCode::Success {
+                    // println!("Received error response:\n{}", body.as_str());
+                    Err(Error::GstdError(res.code, res.description))
+                } else {
+                    Ok(res)
+                }
+            }
+            Err(e) => Err(Error::GstdError(
+                ResponseCode::Success,
+                format!(
+                    "Error parsing json response; {:?}; body: '{}'",
+                    e,
+                    body.as_str()
+                ),
+            ))
         }
 
-        let res = resp
-            .json::<gstd_types::Response>()
-            .await
-            .map_err(Error::BadBody)?;
+        // if !resp.status().is_success() {
+        //     let status = resp.status();
+        //     let body = resp.text().await.map_err(Error::BadBody)?;
+        //     println!("API response {}:\n{}", &status, body);
+        //     return Err(Error::BadStatus(status));
+        // }
 
-        if res.code != gstd_types::ResponseCode::Success {
-            return Err(Error::GstdError(res.code));
-        }
-        Ok(res)
+        // let res = resp
+        //     .json::<gstd_types::Response>()
+        //     .await
+        //     .map_err(Error::BadBody)?;
+
+        // if res.code != gstd_types::ResponseCode::Success {
+        //     return Err(Error::GstdError(res.code));
+        // }
+        // Ok(res)
     }
 
     /// Performs `GET /pipelines` API request, returning the
