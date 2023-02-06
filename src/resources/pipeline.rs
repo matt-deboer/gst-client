@@ -137,6 +137,34 @@ impl Pipeline {
         self.client.process_resp(resp).await
     }
 
+    /// Performs `POST pipelines/{name}/event?name=seek&description=\
+    /// <rate> <format> <flags> <start-type> <start> <end-type> <end>`
+    /// API request, returning the parsed [`gstd_types::Response`]
+    ///
+    /// # Errors
+    ///
+    /// If API request cannot be performed, or fails.
+    /// See [`Error`] for details.
+    pub async fn emit_event_seek(
+        &self, rate: f32, format: GstFormat, seek_flags: SeekFlags, 
+        start_type: SeekType, start: i64, end_type: SeekType, 
+        end: i64
+    ) -> Result<gstd_types::Response, Error> {
+        let resp = self
+            .client
+            .post(&format!("pipelines/{}/event?name=seek&description=\
+                {rate:.2} {fmt} {flags} \
+                {start_t} {start} {end_t} {end}", self.name,
+                fmt = format as i32,
+                flags = seek_flags as i32,
+                start_t = start_type as i32,
+                end_t = end_type as i32
+            ))
+            .await?;
+        self.client.process_resp(resp).await
+    }
+
+
     /// Performs `POST pipelines/{name}/event?name=eos`
     /// API request, returning the parsed [`gstd_types::Response`]
     ///

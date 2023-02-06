@@ -128,3 +128,44 @@ pub struct Bus {
     pub message: String,
     pub debug: String,
 }
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+#[serde(untagged)]
+#[repr(i32)]
+pub enum SeekType {
+    None = 0,
+    Absolute = 1,
+    Relative = 2
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+#[serde(untagged)]
+#[repr(i32)]
+pub enum GstFormat {
+    Undefined = 0,
+    Default = 1,
+    Bytes = 2,
+    TimeInNanoseconds = 3,
+    Buffers = 4,
+    Percent = 5
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+#[serde(untagged)]
+#[repr(i32)]
+pub enum SeekFlags {
+    None = 0, // – no flag
+    Flush = 1, // – flush pipeline
+    Accurate = 2, // – accurate position is requested, this might be considerably slower for some formats.
+    KeyUnit = 4, // – seek to the nearest keyframe. This might be faster but less accurate.
+    Segment = 8, // – perform a segment seek.
+    TrickMode = 16, // – when doing fast forward or fast reverse playback, allow elements to skip frames instead of generating all frames. (Since: 1.6)
+    Skip = 16, // – Deprecated backward compatibility flag, replaced by GST_SEEK_FLAG_TRICKMODE
+    SnapBefore = 32, // – go to a location before the requested position, if GST_SEEK_FLAG_KEY_UNIT this means the keyframe at or before the requested position the one at or before the seek target.
+    SnapAfter = 64, // – go to a location after the requested position, if GST_SEEK_FLAG_KEY_UNIT this means the keyframe at of after the requested position.
+    SnapNearest = 96, // – go to a position near the requested position, if GST_SEEK_FLAG_KEY_UNIT this means the keyframe closest to the requested position, if both keyframes are at an equal distance, behaves like GST_SEEK_FLAG_SNAP_BEFORE.
+    TrickModeKeyUnits = 128, // – when doing fast forward or fast reverse playback, request that elements only decode keyframes and skip all other content, for formats that have keyframes. (Since: 1.6)
+    TrickModeNoAudio = 256, // – when doing fast forward or fast reverse playback, request that audio decoder elements skip decoding and output only gap events or silence. (Since: 1.6)
+    TrickModeForwardPredicted = 512, // – When doing fast forward or fast reverse playback, request that elements only decode keyframes and forward predicted frames and skip all other content (for example B-Frames), for formats that have keyframes and forward predicted frames. (Since: 1.18)
+    InstantRateChange = 1024, //
+}
