@@ -146,8 +146,8 @@ impl Pipeline {
     /// If API request cannot be performed, or fails.
     /// See [`Error`] for details.
     pub async fn emit_event_seek(
-        &self, rate: f32, format: GstFormat, seek_flags: SeekFlags, 
-        start_type: SeekType, start: i64, end_type: SeekType, 
+        &self, rate: f32, format: gstd_types::GstFormat, seek_flags: gstd_types::SeekFlags, 
+        start_type: gstd_types::SeekType, start: i64, end_type: gstd_types::SeekType, 
         end: i64
     ) -> Result<gstd_types::Response, Error> {
         let resp = self
