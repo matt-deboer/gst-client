@@ -160,7 +160,7 @@ pub enum SeekFlags {
     KeyUnit = 4, // – seek to the nearest keyframe. This might be faster but less accurate.
     Segment = 8, // – perform a segment seek.
     TrickMode = 16, // – when doing fast forward or fast reverse playback, allow elements to skip frames instead of generating all frames. (Since: 1.6)
-    Skip = 16, // – Deprecated backward compatibility flag, replaced by GST_SEEK_FLAG_TRICKMODE
+    // Skip = 16, // – Deprecated backward compatibility flag, replaced by GST_SEEK_FLAG_TRICKMODE
     SnapBefore = 32, // – go to a location before the requested position, if GST_SEEK_FLAG_KEY_UNIT this means the keyframe at or before the requested position the one at or before the seek target.
     SnapAfter = 64, // – go to a location after the requested position, if GST_SEEK_FLAG_KEY_UNIT this means the keyframe at of after the requested position.
     SnapNearest = 96, // – go to a position near the requested position, if GST_SEEK_FLAG_KEY_UNIT this means the keyframe closest to the requested position, if both keyframes are at an equal distance, behaves like GST_SEEK_FLAG_SNAP_BEFORE.
