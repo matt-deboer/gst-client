@@ -129,7 +129,7 @@ pub struct Bus {
     pub debug: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Serialize_repr, Deserialize_repr, Clone, Debug)]
 #[serde(untagged)]
 #[repr(i32)]
 pub enum SeekType {
@@ -138,7 +138,7 @@ pub enum SeekType {
     Relative = 2
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Serialize_repr, Deserialize_repr, Clone, Debug)]
 #[serde(untagged)]
 #[repr(i32)]
 pub enum GstFormat {
@@ -150,7 +150,7 @@ pub enum GstFormat {
     Percent = 5
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Serialize_repr, Deserialize_repr, Clone, Debug)]
 #[serde(untagged)]
 #[repr(i32)]
 pub enum SeekFlags {
